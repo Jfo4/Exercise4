@@ -216,101 +216,71 @@ namespace SkalProj_Datastrukturer_Minne
         {
             /*
              * Use this method to check if the parenthesis in a string is Correct or incorrect.
-             * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-             * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
+             * Example of correct: (()), {}, [({})], List<int> list = new List<int>() { 1, 2, 3, 4 };
+             * Example of incorrect: (()]), [), {[()}], List<int> list = new List<int>() { 1, 2, 3, 4 );
              */
 
             // Todo: Check for incorrect match open/close: {[(})]
             // Måste förmodligen använda stack, push/pop.
 
             // Parentesvarianter öppna
-            var openParenthesisPair = new Dictionary<char, char>
-            {
-                { '{', '}' },
-                { '(', ')' },
-                { '[', ']' },
-                { '<', '>' }
-            };
-            // Parentesvarianter stäng
-            var closeParenthesisPair = new Dictionary<char, char>
-            {
-                { '}', '{' },
-                { ')', '(' },
-                { ']', '[' },
-                { '>', '<' }
-            };
+            //var openParenthesisPair = new Dictionary<char, char>
+            //{
+            //    { '{', '}' },
+            //    { '(', ')' },
+            //    { '[', ']' },
+            //    { '<', '>' }
+            //};
+            //// Parentesvarianter stäng
+            //var closeParenthesisPair = new Dictionary<char, char>
+            //{
+            //    { '}', '{' },
+            //    { ')', '(' },
+            //    { ']', '[' },
+            //    { '>', '<' }
+            //};
+            var parenthesisOpen = "({[<";
+            var parenthesisClose = ")}]>";
+
             var parenthesisStack = new Stack<char>();
+            //int checkParentesisFailed = 0;
 
             Console.Clear();
             Console.WriteLine("Parenthesis check. Please input a string with (), [], {}, and/or <>:");
             String parenthesisCheck = Console.ReadLine();
-            //int round = 0;  // ()
-            //int square = 0; // []
-            //int curly = 0;  // {}
-            //int angle = 0;  // <>
+
             for (int i = 0; i < parenthesisCheck.Length; i++)
             {
-                char testChar = parenthesisCheck[i];
-                if (openParenthesisPair.ContainsKey(testChar))
+                char testChar = parenthesisCheck[i]; // Testa ett tecken åt gången
+                if(parenthesisOpen.IndexOf(testChar) >= 0) // Är tecknet en öppnings-parentes?
                 {
                     parenthesisStack.Push(testChar);
                 }
-                else if (closeParenthesisPair.ContainsValue(testChar))
+                else if (parenthesisClose.IndexOf(testChar) >= 0) // Är det en stängnings-parentes?
                 {
                     if (parenthesisStack.Count < 1)
                     {
-                        Console.WriteLine("Parenthesis check failed.");
+                        //checkParentesisFailed = 1;
+                        Console.WriteLine("FAILED");
                         break;
                     }
-                    //char openTest = parenthesisStack.Pop();
-                    Console.WriteLine($"Stack: {parenthesisStack.Peek()}, test: {testChar}");
-                    Console.ReadLine();
+                    // Samma öppnings-parentes som stängning?
+                    else if (parenthesisOpen.IndexOf(parenthesisStack.Peek()) == parenthesisClose.IndexOf(testChar))
+                    {
+                        //Console.WriteLine($"Stack: {parenthesisOpen.IndexOf(parenthesisStack.Peek())}");
+                        //Console.WriteLine($"test: {parenthesisClose.IndexOf(testChar)}");
+                        //Console.WriteLine($"{parenthesisOpen.IndexOf(parenthesisStack.Peek()) == parenthesisClose.IndexOf(testChar)}");
+                        parenthesisStack.Pop();
+                    }
+                    else
+                    {
+                        //checkParentesisFailed = 1;
+                        Console.WriteLine("Failed");
+                        break;
+                    }
                 }
-                Console.WriteLine($"{i}, stack counter: {parenthesisStack.Count}");
-                Console.ReadLine();
-            }  
-                // Check if closing parenthesis occurs before opening parenthesis
-            //    if (round < 0 || square < 0 || curly < 0 || angle < 0) break;
-            //    //Console.WriteLine(test);
-            //    switch (test)
-            //    {
-            //        case '{':
-            //            curly++;
-            //            break;
-            //        case '}':
-            //            curly--;
-            //            break;
-            //        case '[':
-            //            square++;
-            //            break;
-            //        case ']':
-            //            square--;
-            //            break;
-            //        case '(':
-            //            round++;
-            //            break;
-            //        case ')':
-            //            round--;
-            //            break;
-            //        case '<':
-            //            angle++;
-            //            break;
-            //        case '>':
-            //            angle--;
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-            ////Console.WriteLine($"r:{round} s:{square} c:{curly} a:{angle}");
-
-            //// result is 0 (passes test) if the number of opening an closing parenthesis match.
-            //if (round == 0 && square == 0 && curly == 0 && angle == 0)
-            //    Console.WriteLine("Parenthesis check passes.");
-            //else
-            //    Console.WriteLine($"Parenthesis check failed. r:{round} s:{square} c:{curly} a:{angle}");
-            //Console.ReadKey();
+            }
+            Console.ReadKey();
         }
-
     }
 }
