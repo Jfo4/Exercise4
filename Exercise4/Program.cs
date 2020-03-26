@@ -223,57 +223,93 @@ namespace SkalProj_Datastrukturer_Minne
             // Todo: Check for incorrect match open/close: {[(})]
             // Måste förmodligen använda stack, push/pop.
 
+            // Parentesvarianter öppna
+            var openParenthesisPair = new Dictionary<char, char>
+            {
+                { '{', '}' },
+                { '(', ')' },
+                { '[', ']' },
+                { '<', '>' }
+            };
+            // Parentesvarianter stäng
+            var closeParenthesisPair = new Dictionary<char, char>
+            {
+                { '}', '{' },
+                { ')', '(' },
+                { ']', '[' },
+                { '>', '<' }
+            };
+            var parenthesisStack = new Stack<char>();
+
             Console.Clear();
             Console.WriteLine("Parenthesis check. Please input a string with (), [], {}, and/or <>:");
             String parenthesisCheck = Console.ReadLine();
-            int round = 0;  // ()
-            int square = 0; // []
-            int curly = 0;  // {}
-            int angle = 0;  // <>
+            //int round = 0;  // ()
+            //int square = 0; // []
+            //int curly = 0;  // {}
+            //int angle = 0;  // <>
             for (int i = 0; i < parenthesisCheck.Length; i++)
             {
-                // Check if closing parenthesis occurs before opening parenthesis
-                if (round < 0 || square < 0 || curly < 0 || angle < 0) break;
-                char test = parenthesisCheck[i];
-                //Console.WriteLine(test);
-                switch (test)
+                char testChar = parenthesisCheck[i];
+                if (openParenthesisPair.ContainsKey(testChar))
                 {
-                    case '{':
-                        curly++;
-                        break;
-                    case '}':
-                        curly--;
-                        break;
-                    case '[':
-                        square++;
-                        break;
-                    case ']':
-                        square--;
-                        break;
-                    case '(':
-                        round++;
-                        break;
-                    case ')':
-                        round--;
-                        break;
-                    case '<':
-                        angle++;
-                        break;
-                    case '>':
-                        angle--;
-                        break;
-                    default:
-                        break;
+                    parenthesisStack.Push(testChar);
                 }
-            }
-            //Console.WriteLine($"r:{round} s:{square} c:{curly} a:{angle}");
+                else if (closeParenthesisPair.ContainsValue(testChar))
+                {
+                    if (parenthesisStack.Count < 1)
+                    {
+                        Console.WriteLine("Parenthesis check failed.");
+                        break;
+                    }
+                    //char openTest = parenthesisStack.Pop();
+                    Console.WriteLine($"Stack: {parenthesisStack.Peek()}, test: {testChar}");
+                    Console.ReadLine();
+                }
+                Console.WriteLine($"{i}, stack counter: {parenthesisStack.Count}");
+                Console.ReadLine();
+            }  
+                // Check if closing parenthesis occurs before opening parenthesis
+            //    if (round < 0 || square < 0 || curly < 0 || angle < 0) break;
+            //    //Console.WriteLine(test);
+            //    switch (test)
+            //    {
+            //        case '{':
+            //            curly++;
+            //            break;
+            //        case '}':
+            //            curly--;
+            //            break;
+            //        case '[':
+            //            square++;
+            //            break;
+            //        case ']':
+            //            square--;
+            //            break;
+            //        case '(':
+            //            round++;
+            //            break;
+            //        case ')':
+            //            round--;
+            //            break;
+            //        case '<':
+            //            angle++;
+            //            break;
+            //        case '>':
+            //            angle--;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            ////Console.WriteLine($"r:{round} s:{square} c:{curly} a:{angle}");
 
-            // result is 0 (passes test) if the number of opening an closing parenthesis match.
-            if (round == 0 && square == 0 && curly == 0 && angle == 0)
-                Console.WriteLine("Parenthesis check passes.");
-            else
-                Console.WriteLine($"Parenthesis check failed. r:{round} s:{square} c:{curly} a:{angle}");
-            Console.ReadKey();
+            //// result is 0 (passes test) if the number of opening an closing parenthesis match.
+            //if (round == 0 && square == 0 && curly == 0 && angle == 0)
+            //    Console.WriteLine("Parenthesis check passes.");
+            //else
+            //    Console.WriteLine($"Parenthesis check failed. r:{round} s:{square} c:{curly} a:{angle}");
+            //Console.ReadKey();
         }
 
     }
