@@ -249,9 +249,10 @@ namespace SkalProj_Datastrukturer_Minne
             Console.WriteLine("Parenthesis check. Please input a string with (), [], {}, and/or <>:");
             String parenthesisCheck = Console.ReadLine();
 
-            for (int i = 0; i < parenthesisCheck.Length; i++)
+            //for (int i = 0; i < parenthesisCheck.Length; i++)
+            foreach (char testChar in parenthesisCheck)
             {
-                char testChar = parenthesisCheck[i]; // Testa ett tecken åt gången
+//                char testChar = parenthesisCheck[i]; // Testa ett tecken åt gången
                 if(parenthesisOpen.IndexOf(testChar) >= 0) // Är tecknet en öppnings-parentes?
                 {
                     parenthesisStack.Push(testChar);
