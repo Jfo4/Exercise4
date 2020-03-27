@@ -170,9 +170,7 @@ namespace SkalProj_Datastrukturer_Minne
                     case '.':
                         Console.WriteLine($"Antal i kö: {myQ.Count}");
                         foreach (object o in myQ)
-                        {
                             Console.WriteLine($"{o}");
-                        }
                         break;
                     case 'a':
                     case 'A':
@@ -221,70 +219,49 @@ namespace SkalProj_Datastrukturer_Minne
              * Example of incorrect: (()]), [), {[()}], List<int> list = new List<int>() { 1, 2, 3, 4 );
              */
 
-            // Todo: Check for incorrect match open/close: {[(})]
-            // Måste förmodligen använda stack, push/pop.
-
-            // Parentesvarianter öppna
-            //var openParenthesisPair = new Dictionary<char, char>
-            //{
-            //    { '{', '}' },
-            //    { '(', ')' },
-            //    { '[', ']' },
-            //    { '<', '>' }
-            //};
-            //// Parentesvarianter stäng
-            //var closeParenthesisPair = new Dictionary<char, char>
-            //{
-            //    { '}', '{' },
-            //    { ')', '(' },
-            //    { ']', '[' },
-            //    { '>', '<' }
-            //};
             var parenthesisOpen = "({[<";
             var parenthesisClose = ")}]>";
 
             var parenthesisStack = new Stack<char>();
-            //int checkParentesisFailed = 0;
 
             Console.Clear();
             Console.WriteLine("Parenthesis check. Please input a string with (), [], {}, and/or <>:");
             String parenthesisCheck = Console.ReadLine();
 
-            StringBuilder sb = new StringBuilder(); // Parenthesis check: Failed och passes
+            StringBuilder sb = new StringBuilder(); // Parenthesis check: fails/passes
 
-            //for (int i = 0; i < parenthesisCheck.Length; i++)
-            foreach (char testChar in parenthesisCheck)
+            for (int i = 0; i < parenthesisCheck.Length; i++)
             {
-//                char testChar = parenthesisCheck[i]; // Testa ett tecken åt gången
-                if(parenthesisOpen.IndexOf(testChar) >= 0) // Är tecknet en öppnings-parentes?
+                char testChar = parenthesisCheck[i]; // One char at a time
+                if (parenthesisOpen.IndexOf(testChar) >= 0) // Opening parenthesis?
+                    parenthesisStack.Push(testChar); // Put on stack
+                else if (parenthesisClose.IndexOf(testChar) >= 0)
                 {
-                    parenthesisStack.Push(testChar);
-                }
-                else if (parenthesisClose.IndexOf(testChar) >= 0) // Är det en stängnings-parentes?
-                {
-                    if (parenthesisStack.Count < 1)
+                    if (parenthesisStack.Count == 0)
                     {
-                        //checkParentesisFailed = 1;
-                        //Console.WriteLine("FAILED");
-                        sb.Append("FAILED");
+                        // Closing parenthesis, but stack is empty.
+                        sb.Append($"fails, position {i+1}.\nClosing parenthesis before opening");
                         break;
                     }
-                    // Samma öppnings-parentes som stängning?
+                    // Matching opening/closing parenthesis?
                     else if (parenthesisOpen.IndexOf(parenthesisStack.Peek()) ==
                         parenthesisClose.IndexOf(testChar))
                     {
-                        //Console.WriteLine($"Stack: {parenthesisOpen.IndexOf(parenthesisStack.Peek())}");
-                        //Console.WriteLine($"test: {parenthesisClose.IndexOf(testChar)}");
-                        //Console.WriteLine($"{parenthesisOpen.IndexOf(parenthesisStack.Peek()) == parenthesisClose.IndexOf(testChar)}");
+                        // ...yes, remove from stack
                         parenthesisStack.Pop();
                     }
                     else
                     {
-                        //checkParentesisFailed = 1;
-                        //Console.WriteLine("Failed");
-                        sb.Append("Failed");
+                        // Closing parenthesis didn't match opening parenthesis
+                        sb.Append($"fails, position {i + 1}.\nMismatching parenthesis");
                         break;
                     }
+                }
+                // End of text, but stack not empty? Closing parenthesis missing.
+                if (parenthesisCheck.Length - 1 == i && parenthesisStack.Count > 0)
+                {
+                    sb.Append($"fails, position {i + 1}.\nMissing closing parenthesis");
+                    break;
                 }
             }
             Console.WriteLine($"Parenthesis check {(sb.Length > 0 ? sb.ToString() : "passes")}.");
