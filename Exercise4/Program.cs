@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 // 1. Stack: som en hög med pannkakor, sist in - först ut
 //    Det kan vara variabler som endast existerar när metod körs, men inte är åtkomlig efteråt.
@@ -249,6 +250,8 @@ namespace SkalProj_Datastrukturer_Minne
             Console.WriteLine("Parenthesis check. Please input a string with (), [], {}, and/or <>:");
             String parenthesisCheck = Console.ReadLine();
 
+            StringBuilder sb = new StringBuilder(); // Parenthesis check: Failed och passes
+
             //for (int i = 0; i < parenthesisCheck.Length; i++)
             foreach (char testChar in parenthesisCheck)
             {
@@ -262,11 +265,13 @@ namespace SkalProj_Datastrukturer_Minne
                     if (parenthesisStack.Count < 1)
                     {
                         //checkParentesisFailed = 1;
-                        Console.WriteLine("FAILED");
+                        //Console.WriteLine("FAILED");
+                        sb.Append("FAILED");
                         break;
                     }
                     // Samma öppnings-parentes som stängning?
-                    else if (parenthesisOpen.IndexOf(parenthesisStack.Peek()) == parenthesisClose.IndexOf(testChar))
+                    else if (parenthesisOpen.IndexOf(parenthesisStack.Peek()) ==
+                        parenthesisClose.IndexOf(testChar))
                     {
                         //Console.WriteLine($"Stack: {parenthesisOpen.IndexOf(parenthesisStack.Peek())}");
                         //Console.WriteLine($"test: {parenthesisClose.IndexOf(testChar)}");
@@ -276,11 +281,13 @@ namespace SkalProj_Datastrukturer_Minne
                     else
                     {
                         //checkParentesisFailed = 1;
-                        Console.WriteLine("Failed");
+                        //Console.WriteLine("Failed");
+                        sb.Append("Failed");
                         break;
                     }
                 }
             }
+            Console.WriteLine($"Parenthesis check {(sb.Length > 0 ? sb.ToString() : "passes")}.");
             Console.ReadKey();
         }
     }
